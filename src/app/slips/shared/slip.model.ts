@@ -1,4 +1,4 @@
-export class Car {
+export class Slip {
     id: string;
     name: string;
     hasAC: boolean;

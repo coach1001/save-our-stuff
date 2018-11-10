@@ -5,22 +5,22 @@ import { Subscription } from "rxjs";
 import { finalize } from "rxjs/operators";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 
-import { Car } from "./shared/car.model";
-import { CarService } from "./shared/car.service";
+import { Slip } from "./shared/slip.model";
+import { SlipService } from "./shared/slip.service";
 
 @Component({
-    selector: "CarsList",
+    selector: "slipsList",
     moduleId: module.id,
-    templateUrl: "./car-list.component.html",
-    styleUrls: ["./car-list.component.scss"]
+    templateUrl: "./slip-list.component.html",
+    styleUrls: ["./slip-list.component.scss"]
 })
-export class CarListComponent implements OnInit, OnDestroy {
+export class SlipListComponent implements OnInit, OnDestroy {
     private _isLoading: boolean = false;
-    private _cars: ObservableArray<Car> = new ObservableArray<Car>([]);
+    private _slips: ObservableArray<Slip> = new ObservableArray<Slip>([]);
     private _dataSubscription: Subscription;
 
     constructor(
-        private _carService: CarService,
+        private _slipService: SlipService,
         private _routerExtensions: RouterExtensions
     ) { }
 
@@ -28,10 +28,10 @@ export class CarListComponent implements OnInit, OnDestroy {
         if (!this._dataSubscription) {
             this._isLoading = true;
 
-            this._dataSubscription = this._carService.load()
+            this._dataSubscription = this._slipService.load()
                 .pipe(finalize(() => this._isLoading = false))
-                .subscribe((cars: Array<Car>) => {
-                    this._cars = new ObservableArray(cars);
+                .subscribe((slips: Array<Slip>) => {
+                    this._slips = new ObservableArray(slips);
                     this._isLoading = false;
                 });
         }
@@ -44,18 +44,18 @@ export class CarListComponent implements OnInit, OnDestroy {
         }
     }
 
-    get cars(): ObservableArray<Car> {
-        return this._cars;
+    get slips(): ObservableArray<Slip> {
+        return this._slips;
     }
 
     get isLoading(): boolean {
         return this._isLoading;
     }
 
-    onCarItemTap(args: ListViewEventData): void {
-        const tappedCarItem = args.view.bindingContext;
+    onslipItemTap(args: ListViewEventData): void {
+        const tappedslipItem = args.view.bindingContext;
 
-        this._routerExtensions.navigate(["/cars/car-detail", tappedCarItem.id],
+        this._routerExtensions.navigate(["/slips/slip-detail", tappedslipItem.id],
             {
                 animated: true,
                 transition: {

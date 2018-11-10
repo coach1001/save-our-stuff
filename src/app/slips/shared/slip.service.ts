@@ -3,7 +3,7 @@ import * as firebase from "nativescript-plugin-firebase";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 
-import { Car } from "./car.model";
+import { Slip } from "./slip.model";
 
 const editableProperties = [
     "doors",
@@ -25,28 +25,28 @@ const editableProperties = [
 * Check out how it is imported in the main.ts file and the actual script in /shared/firebase.common.ts file.
 *************************************************************/
 @Injectable()
-export class CarService {
-    private static cloneUpdateModel(car: Car): object {
-        return editableProperties.reduce((a, e) => (a[e] = car[e], a), {}); // tslint:disable-line:ban-comma-operator
+export class SlipService {
+    private static cloneUpdateModel(slip: Slip): object {
+        return editableProperties.reduce((a, e) => (a[e] = slip[e], a), {}); // tslint:disable-line:ban-comma-operator
     }
 
-    private _cars: Array<Car> = [];
+    private _slips: Array<Slip> = [];
 
     constructor(private _ngZone: NgZone) { }
 
-    getCarById(id: string): Car {
+    getslipById(id: string): Slip {
         if (!id) {
             return;
         }
 
-        return this._cars.filter((car) => {
-            return car.id === id;
+        return this._slips.filter((slip) => {
+            return slip.id === id;
         })[0];
     }
 
     load(): Observable<any> {
         return new Observable((observer: any) => {
-            const path = "cars";
+            const path = "slips";
 
             const onValueEvent = (snapshot: any) => {
                 this._ngZone.run(() => {
@@ -58,10 +58,10 @@ export class CarService {
         }).pipe(catchError(this.handleErrors));
     }
 
-    update(carModel: Car): Promise<any> {
-        const updateModel = CarService.cloneUpdateModel(carModel);
+    update(slipModel: Slip): Promise<any> {
+        const updateModel = SlipService.cloneUpdateModel(slipModel);
 
-        return firebase.update("/cars/" + carModel.id, updateModel);
+        return firebase.update("/slips/" + slipModel.id, updateModel);
     }
 
     uploadImage(remoteFullPath: string, localFullPath: string): Promise<any> {
@@ -72,18 +72,18 @@ export class CarService {
         });
     }
 
-    private handleSnapshot(data: any): Array<Car> {
-        this._cars = [];
+    private handleSnapshot(data: any): Array<Slip> {
+        this._slips = [];
 
         if (data) {
             for (const id in data) {
                 if (data.hasOwnProperty(id)) {
-                    this._cars.push(new Car(data[id]));
+                    this._slips.push(new Slip(data[id]));
                 }
             }
         }
 
-        return this._cars;
+        return this._slips;
     }
 
     private handleErrors(error: Response): Observable<never> {

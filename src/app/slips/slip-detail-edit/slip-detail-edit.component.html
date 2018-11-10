@@ -4,7 +4,7 @@
     <ActionItem ios.position="left" android.position="left" (tap)="onCancelButtonTap()">
         <Label text="Cancel" class="action-item"></Label>
     </ActionItem>
-    <Label class="action-bar-title" text="Edit Car Details" horizontalAlignment="center"></Label>
+    <Label class="action-bar-title" text="Edit slip Details" horizontalAlignment="center"></Label>
     <ActionItem ios.position="right" android.position="right">
         <Label text="Done" class="action-item" verticalAlignment="center" (tap)="onDoneButtonTap()" 
             [isEnabled]="makeModel.valid && imageModel.valid"
@@ -14,14 +14,14 @@
 
 <GridLayout class="page page-content">
     <ScrollView>
-        <StackLayout class="car-list">
+        <StackLayout class="slip-list">
 
-            <Label text="CAR MAKE" class="car-list-odd"></Label>
-            <TextField #makeModel="ngModel" hint="Car make field is required" [(ngModel)]="car.name" class="car-list-even" required></TextField>
+            <Label text="slip MAKE" class="slip-list-odd"></Label>
+            <TextField #makeModel="ngModel" hint="slip make field is required" [(ngModel)]="slip.name" class="slip-list-even" required></TextField>
             
-            <GridLayout rows="*, 55, *" columns="*, auto" class="car-list-odd">
+            <GridLayout rows="*, 55, *" columns="*, auto" class="slip-list-odd">
                 <Label text="PRICE PER DAY"></Label>
-                <Label col="1" horizontalAlignment="right" class="text-primary car-list-price">
+                <Label col="1" horizontalAlignment="right" class="text-primary slip-list-price">
                     <FormattedString>
                         <Span text="€"></Span>
                         <Span [text]="pricePerDay"></Span>
@@ -35,44 +35,44 @@
                 <Label text="ADD OR REMOVE IMAGE" row="2" colSpan="2"></Label>
             </GridLayout>
 
-            <StackLayout class="car-list-even">
+            <StackLayout class="slip-list-even">
                 <!--
                 MyImageAddRemove is a custom component, that wraps an imagepicker plugin and provides custom design and logic
-                on top of it. Check out the custom component at /cars/car-detail-edit/my-image-add-remove.
+                on top of it. Check out the custom component at /slips/slip-detail-edit/my-image-add-remove.
                 -->
-                <MyImageAddRemove #imageModel="ngModel" [(ngModel)]="carImageUrl" required></MyImageAddRemove>
+                <MyImageAddRemove #imageModel="ngModel" [(ngModel)]="slipImageUrl" required></MyImageAddRemove>
                 <Label *ngIf="!imageModel.valid" class="ng-invalid-image" text="Image field is required"></Label>
             </StackLayout>
 
-            <Label class="car-list-odd" text="CLASS"></Label>
+            <Label class="slip-list-odd" text="CLASS"></Label>
 
-            <StackLayout class="car-list-even">
+            <StackLayout class="slip-list-even">
                 <!--
                 MyListSelector is a custom component, that provides custom design and logic for picking an option from a list.
-                Check out the custom component at /cars/car-detail-edit/my-list-selector.
+                Check out the custom component at /slips/slip-detail-edit/my-list-selector.
                 -->
-                <MyListSelector [(selectedValue)]="car.class" [items]="carClassOptions" tag="class"></MyListSelector>
+                <MyListSelector [(selectedValue)]="slip.class" [items]="slipClassOptions" tag="class"></MyListSelector>
             </StackLayout>
 
-            <Label class="car-list-odd" text="DOORS"></Label>
+            <Label class="slip-list-odd" text="DOORS"></Label>
 
-            <StackLayout class="car-list-even">
-                <MyListSelector [(selectedValue)]="car.doors" [items]="carDoorOptions" tag="doors"></MyListSelector>
+            <StackLayout class="slip-list-even">
+                <MyListSelector [(selectedValue)]="slip.doors" [items]="slipDoorOptions" tag="doors"></MyListSelector>
             </StackLayout>
 
-            <Label class="car-list-odd" text="SEATS"></Label>
+            <Label class="slip-list-odd" text="SEATS"></Label>
 
-            <StackLayout class="car-list-even">
-                <MyListSelector [(selectedValue)]="car.seats" [items]="carSeatOptions" tag="seats"></MyListSelector>
+            <StackLayout class="slip-list-even">
+                <MyListSelector [(selectedValue)]="slip.seats" [items]="slipSeatOptions" tag="seats"></MyListSelector>
             </StackLayout>
 
-            <Label class="car-list-odd" text="TRANSMISSION"></Label>
+            <Label class="slip-list-odd" text="TRANSMISSION"></Label>
 
-            <StackLayout class="car-list-even">
-                <MyListSelector [(selectedValue)]="car.transmission" [items]="carTransmissionOptions" tag="transmission"></MyListSelector>
+            <StackLayout class="slip-list-even">
+                <MyListSelector [(selectedValue)]="slip.transmission" [items]="slipTransmissionOptions" tag="transmission"></MyListSelector>
             </StackLayout>
 
-            <GridLayout rows="*, 55" columns="*, auto" class="car-list-odd">
+            <GridLayout rows="*, 55" columns="*, auto" class="slip-list-odd">
                 <Label text="LUGGAGE"></Label>
                 <Label col="1" horizontalAlignment="right" class="text-primary">
                     <FormattedString>

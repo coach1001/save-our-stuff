@@ -3,8 +3,8 @@ import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
 const routes: Routes = [
-    { path: "", redirectTo: "/cars", pathMatch: "full" },
-    { path: "cars", loadChildren: "~/app/cars/cars.module#CarsModule" }
+    { path: "", redirectTo: "/slips", pathMatch: "full" },
+    { path: "slips", loadChildren: "~/app/slips/slips.module#SlipsModule" },
 ];
 
 @NgModule({

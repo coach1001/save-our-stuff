@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { PageRoute, RouterExtensions } from "nativescript-angular/router";
 import { switchMap } from "rxjs/operators";
 
-import { Car } from "../shared/car.model";
-import { CarService } from "../shared/car.service";
+import { Slip } from "../shared/slip.model";
+import { SlipService } from "../shared/slip.service";
 
 /* ***********************************************************
 * This is the item details component in the master-detail structure.
@@ -11,15 +11,15 @@ import { CarService } from "../shared/car.service";
 * finds the data item by this parameter and displays the detailed data item information.
 *************************************************************/
 @Component({
-    selector: "CarDetail",
+    selector: "slipDetail",
     moduleId: module.id,
-    templateUrl: "./car-detail.component.html"
+    templateUrl: "./slip-detail.component.html"
 })
-export class CarDetailComponent implements OnInit {
-    private _car: Car;
+export class SlipDetailComponent implements OnInit {
+    private _slip: Slip;
 
     constructor(
-        private _carService: CarService,
+        private _slipService: SlipService,
         private _pageRoute: PageRoute,
         private _routerExtensions: RouterExtensions
     ) { }
@@ -37,14 +37,14 @@ export class CarDetailComponent implements OnInit {
         this._pageRoute.activatedRoute
             .pipe(switchMap((activatedRoute) => activatedRoute.params))
             .forEach((params) => {
-                const carId = params.id;
+                const slipId = params.id;
 
-                this._car = this._carService.getCarById(carId);
+                this._slip = this._slipService.getslipById(slipId);
             });
     }
 
-    get car(): Car {
-        return this._car;
+    get slip(): Slip {
+        return this._slip;
     }
 
     /* ***********************************************************
@@ -56,10 +56,10 @@ export class CarDetailComponent implements OnInit {
 
     /* ***********************************************************
     * The master-detail template comes with an example of an item edit page.
-    * Check out the edit page in the /cars/car-detail-edit folder.
+    * Check out the edit page in the /slips/slip-detail-edit folder.
     *************************************************************/
     onEditButtonTap(): void {
-        this._routerExtensions.navigate(["/cars/car-detail-edit", this._car.id],
+        this._routerExtensions.navigate(["/slips/slip-detail-edit", this._slip.id],
             {
                 animated: true,
                 transition: {

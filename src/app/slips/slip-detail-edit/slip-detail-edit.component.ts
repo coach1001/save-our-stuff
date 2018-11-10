@@ -3,29 +3,29 @@ import { PageRoute, RouterExtensions } from "nativescript-angular/router";
 import { switchMap } from "rxjs/operators";
 import { alert } from "tns-core-modules/ui/dialogs";
 
-import { CarEditService } from "../shared/car-edit.service";
-import { Car } from "../shared/car.model";
-import { CarService } from "../shared/car.service";
-import { carClassList, carDoorList, carSeatList, carTransmissionList } from "./constants";
+import { slipEditService } from "../shared/slip-edit.service";
+import { Slip } from "../shared/slip.model";
+import { SlipService } from "../shared/slip.service";
+import { slipClassList, slipDoorList, slipSeatList, slipTransmissionList } from "~/app/slips/slip-detail-edit/constants";
 
 @Component({
     moduleId: module.id,
-    selector: "CarDetailEdit",
-    templateUrl: "./car-detail-edit.component.html",
-    styleUrls: ["./car-detail-edit.component.scss"]
+    selector: "slipDetailEdit",
+    templateUrl: "./slip-detail-edit.component.html",
+    styleUrls: ["./slip-detail-edit.component.scss"]
 })
-export class CarDetailEditComponent implements OnInit {
-    private _car: Car;
-    private _carClassOptions: Array<string> = [];
-    private _carDoorOptions: Array<number> = [];
-    private _carSeatOptions: Array<string> = [];
-    private _carTransmissionOptions: Array<string> = [];
-    private _isCarImageDirty: boolean = false;
+export class SlipDetailEditComponent implements OnInit {
+    private _slip: Slip;
+    private _slipClassOptions: Array<string> = [];
+    private _slipDoorOptions: Array<number> = [];
+    private _slipSeatOptions: Array<string> = [];
+    private _slipTransmissionOptions: Array<string> = [];
+    private _isSlipImageDirty: boolean = false;
     private _isUpdating: boolean = false;
 
     constructor(
-        private _carService: CarService,
-        private _carEditService: CarEditService,
+        private _slipService: SlipService,
+        private _slipEditService: slipEditService,
         private _pageRoute: PageRoute,
         private _routerExtensions: RouterExtensions
     ) { }
@@ -36,9 +36,9 @@ export class CarDetailEditComponent implements OnInit {
         this._pageRoute.activatedRoute
             .pipe(switchMap((activatedRoute) => activatedRoute.params))
             .forEach((params) => {
-                const carId = params.id;
+                const slipId = params.id;
 
-                this._car = this._carEditService.startEdit(carId);
+                this._slip = this._slipEditService.startEdit(slipId);
             });
     }
 
@@ -46,51 +46,51 @@ export class CarDetailEditComponent implements OnInit {
         return this._isUpdating;
     }
 
-    get car(): Car {
-        return this._car;
+    get slip(): Slip {
+        return this._slip;
     }
 
     get pricePerDay(): number {
-        return this._car.price;
+        return this._slip.price;
     }
 
     set pricePerDay(value: number) {
         // force iOS UISlider to work with discrete steps
-        this._car.price = Math.round(value);
+        this._slip.price = Math.round(value);
     }
 
     get luggageValue(): number {
-        return this._car.luggage;
+        return this._slip.luggage;
     }
 
     set luggageValue(value: number) {
         // force iOS UISlider to work with discrete steps
-        this._car.luggage = Math.round(value);
+        this._slip.luggage = Math.round(value);
     }
 
-    get carClassOptions(): Array<string> {
-        return this._carClassOptions;
+    get slipClassOptions(): Array<string> {
+        return this._slipClassOptions;
     }
 
-    get carDoorOptions(): Array<number> {
-        return this._carDoorOptions;
+    get slipDoorOptions(): Array<number> {
+        return this._slipDoorOptions;
     }
 
-    get carSeatOptions(): Array<string> {
-        return this._carSeatOptions;
+    get slipSeatOptions(): Array<string> {
+        return this._slipSeatOptions;
     }
 
-    get carTransmissionOptions(): Array<string> {
-        return this._carTransmissionOptions;
+    get slipTransmissionOptions(): Array<string> {
+        return this._slipTransmissionOptions;
     }
 
-    get carImageUrl(): string {
-        return this._car.imageUrl;
+    get slipImageUrl(): string {
+        return this._slip.imageUrl;
     }
 
-    set carImageUrl(value: string) {
-        this._car.imageUrl = value;
-        this._isCarImageDirty = true;
+    set slipImageUrl(value: string) {
+        this._slip.imageUrl = value;
+        this._isSlipImageDirty = true;
     }
 
     onCancelButtonTap(): void {
@@ -109,18 +109,18 @@ export class CarDetailEditComponent implements OnInit {
 
         this._isUpdating = true;
 
-        if (this._isCarImageDirty && this._car.imageUrl) {
+        if (this._isslipImageDirty && this._slip.imageUrl) {
             queue = queue
-                .then(() => this._carService.uploadImage(this._car.imageStoragePath, this._car.imageUrl))
+                .then(() => this._slipService.uploadImage(this._slip.imageStoragePath, this._slip.imageUrl))
                 .then((uploadedFile: any) => {
-                    this._car.imageUrl = uploadedFile.url;
+                    this._slip.imageUrl = uploadedFile.url;
                 });
         }
 
-        queue.then(() => this._carService.update(this._car))
+        queue.then(() => this._slipService.update(this._slip))
             .then(() => {
                 this._isUpdating = false;
-                this._routerExtensions.navigate(["/cars"], {
+                this._routerExtensions.navigate(["/slips"], {
                     clearHistory: true,
                     animated: true,
                     transition: {
@@ -142,7 +142,7 @@ export class CarDetailEditComponent implements OnInit {
         const readOnlyMessage = "Check out the \"Firebase database setup\" section in the readme file to make it editable."; // tslint:disable-line:max-line-length
         const queue = Promise.resolve();
         queue.then(() => alert({ title: "Read-Only Template!", message: readOnlyMessage, okButtonText: "Ok" }))
-            .then(() => this._routerExtensions.navigate(["/cars"], {
+            .then(() => this._routerExtensions.navigate(["/slips"], {
                 clearHistory: true,
                 animated: true,
                 transition: {
@@ -154,20 +154,20 @@ export class CarDetailEditComponent implements OnInit {
     }
 
     private initializeEditOptions(): void {
-        for (const classItem of carClassList) {
-            this._carClassOptions.push(classItem);
+        for (const classItem of slipClassList) {
+            this._slipClassOptions.push(classItem);
         }
 
-        for (const doorItem of carDoorList) {
-            this._carDoorOptions.push(doorItem);
+        for (const doorItem of slipDoorList) {
+            this._slipDoorOptions.push(doorItem);
         }
 
-        for (const seatItem of carSeatList) {
-            this._carSeatOptions.push(seatItem);
+        for (const seatItem of slipSeatList) {
+            this._slipSeatOptions.push(seatItem);
         }
 
-        for (const transmissionItem of carTransmissionList) {
-            this._carTransmissionOptions.push(transmissionItem);
+        for (const transmissionItem of slipTransmissionList) {
+            this._slipTransmissionOptions.push(transmissionItem);
         }
     }
 }
